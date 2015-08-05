@@ -116,7 +116,9 @@ typedef u_int32_t gid_t;	/* group ID */
 
 #define strcasecmp     stricmp
 #define strncasecmp    strnicmp
+#if _MSC_VER < 1900
 #define snprintf       _snprintf
+#endif
 #if _MSC_VER < 1500
 #define vsnprintf      _vsnprintf
 #endif
