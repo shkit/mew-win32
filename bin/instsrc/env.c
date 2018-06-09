@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1997-2015 Mew developing team.
+ * Copyright (C) 1997-2018 Mew developing team.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -157,7 +157,7 @@ BOOL ReadEmacsEnvironments( LPCSTR lpszIniFile )
 
     /* detect Emacs type */
     if ( bEmacsType == EMACS_NONE ){
-	GetPrivateProfileString("Make","EMACS","Meadow",
+	GetPrivateProfileString("Make","EMACS","Emacs",
 				szBuf,sizeof(szBuf),
 				lpszIniFile);
 	if ( ! _stricmp(szBuf,"Emacs") )

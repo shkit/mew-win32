@@ -18,3 +18,8 @@ bin/hs/cmew
 bin/hs/dist
 TAGS
 info/dir
+.vs
+*.res
+*.ZIP
+*.sha1
+stack.yaml

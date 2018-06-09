@@ -2,12 +2,11 @@ cd bin
 nmake -f Makefile.w32
 cd instsrc
 nmake
-copy mew.exe ..\..
 cd ..
 cd hs
-cabal --extra-include-dirs=C:/usr/local/include --extra-lib-dirs=C:/bin32 install
-rmdir /s /q dist
+stack init --force
+stack build --extra-include-dirs=C:/usr/local/include --extra-lib-dirs=C:/bin32
+stack --local-bin-path . install
+rmdir /s /q .stack-work
 cd ..
-copy %APPDATA%\cabal\bin\smew.exe .
-copy %APPDATA%\cabal\bin\cmew.exe .
 cd ..
