@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1997-2015 Mew developing team.
+ * Copyright (C) 1997-2018 Mew developing team.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -887,13 +887,16 @@ BOOL SelectEmacsen( VOID )
 {
   int      nIndex;
   LONG     rret;
-  HKEY     hKey,hKey2;
-  DWORD    i;
+  HKEY     hKey;
   char     szKeyBuf[260];
   char     szValueBuf[1024];
   DWORD    dwKeyBuf,dwValueBuf;
-  FILETIME ft;
   char     *pszEDir;
+#if 0
+  FILETIME ft;
+  HKEY     hKey2;
+  DWORD    i;
+#endif
 
   /* gathering Emacs infomation... */
   iEmacsenNum=0;
@@ -955,6 +958,7 @@ BOOL SelectEmacsen( VOID )
     } /* if ( RegQueryValueEx( */
     RegCloseKey( hKey );
   }
+#if 0
   /* Meadow */
   i=0;
   rret = RegOpenKey( HKEY_LOCAL_MACHINE,
@@ -1014,6 +1018,7 @@ BOOL SelectEmacsen( VOID )
     }
     RegCloseKey( hKey );
   }
+#endif
 
   /* IF NOT FOUND ANY EMACSEN */
   if ( iEmacsenNum == 0 ) return ( FALSE );

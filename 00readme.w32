@@ -9,26 +9,14 @@
 
 INPORTANT!
 ----------
-  o Mew 2.x and later does not use IM.
-    You MUST modify your ~/.mew or ~/.emacs
-    (add smtp/pop server name, and so on)
+  o Mew 6.8 and later supports Emacs 24.3 or later.
 
-  o Mew 5.2.53 and later supports Emacs 21 or later (Meadow 2.10 or later).
 
 REQUIRED SOFTWARE
 -----------------
-  One of the Emacsens.
-
-  o Meadow 2.10 or later
-    (Multilingual enhancement to gnu Emacs with ADvantages Over Windows)
-
-    http://www.meadowy.org/meadow/dists/
-
-  o GNU Emacs for Windows  (NTEmacs)
+  o GNU Emacs for Windows
 
     http://www.gnu.org/software/emacs/index.html
-    http://ntemacsjp.sourceforge.jp/ (NTEmacs JP)
-    http://gnupack.sourceforge.jp/docs/current/UsersGuide_download.html#_download_emacs (emacs for gnupack)
 
     Before using Mew installer(mew.exe), you must set environment variable
     "emacs_dir" like this:
@@ -37,7 +25,7 @@ REQUIRED SOFTWARE
         [Environment Variables] -> [New] ->
 
         Variable name:  => emacs_dir
-        Variable value: => c:\emacs-21.4   (your NTEmacs path)
+        Variable value: => c:\emacs-26.1  (your Emacs path)
 
 
 HOW TO INSTALL
@@ -62,7 +50,7 @@ USING CMEW.EXE/SMEW.EXE
       1. download "sqlite-dll-win32-x86-???????.zip" from
          http://www.sqlite.org/download.html
       2. extract archive and copy sqlite3.dll to executable path.
-         (e.g. Meadow\bin)
+         (e.g. emacs-26.1\bin)
 
 
 FAQ AND OTHER INFORMATION
@@ -70,7 +58,7 @@ FAQ AND OTHER INFORMATION
   Mew Official Homepage :
         http://www.Mew.org/
   Mew on Win32 Project :
-        http://www.ysnb.net/mew/
+        https://github.com/shkit/mew-win32/releases
 
 
 SPECIAL THANKS
