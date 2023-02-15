@@ -203,8 +203,8 @@ void GetLinesFromMakefile( void )
   char   buf[256];
   char   *pt;
 
-  if ((fp=fopen("Makefile.in", "r")) == NULL){
-      perror("Makefile.in");
+  if ((fp=fopen("elisp\\Makefile", "r")) == NULL){
+      perror("elisp\\Makefile");
       return;
   }
   if (!GetLine(fp, buf, sizeof(buf))) return;
@@ -359,6 +359,8 @@ BOOL CompileSources( VOID )
   FILE *fp;
   int ret;
 
+  _chdir("elisp");
+
   /* make temp.el */
   memcpy(szTargetBuf,szObjs,BUFLEN);
   fp = fopen(szTempFile,"w+");
@@ -386,6 +388,8 @@ BOOL CompileSources( VOID )
     sprintf(szBuf, "system() failed.(%d)\n", ret);
     OutputDebugLog(szBuf);
   }
+
+  _chdir("..");
 
   return ( TRUE );
 }
@@ -517,7 +521,7 @@ BOOL InstallMew( VOID )
   /* szSrcs/szObjs are destroyed */
   char *token;
   char seps[] = " \t";
-  char szBuf[256],szBuf2[256],szSrcFile[MAX_PATH];
+  char szBuf[256],szSrcBuf[256],szBuf2[256],szSrcFile[MAX_PATH];
   BOOL fError = FALSE;
   char szPBuf[256], szPBuf2[32];
   DWORD dwError;
@@ -557,8 +561,9 @@ BOOL InstallMew( VOID )
   token = strtok( szSrcs, seps );
   while ( token ){
     sprintf(szBuf,"%s\\%s",szElispDir,token);
-    sprintf(szPBuf,"Copying [%s] to [%s] ...",token,szBuf);
-    if ( ! CopyFile(token,szBuf,FALSE) ){
+    sprintf(szSrcBuf,"elisp\\%s",token);
+    sprintf(szPBuf,"Copying [%s] to [%s] ...",szSrcBuf,szBuf);
+    if ( ! CopyFile(szSrcBuf,szBuf,FALSE) ){
       dwError = GetLastError();
       sprintf(szPBuf2, "fail.(0x%08x)", dwError);
       strcat(szPBuf, szPBuf2);
@@ -576,8 +581,9 @@ BOOL InstallMew( VOID )
   token = strtok( szObjs, seps );
   while ( token ){
     sprintf(szBuf,"%s\\%s",szElispDir,token);
-    sprintf(szPBuf,"Copying [%s] to [%s] ...",token,szBuf);
-    if ( ! CopyFile(token,szBuf,FALSE) ){
+    sprintf(szSrcBuf,"elisp\\%s",token);
+    sprintf(szPBuf,"Copying [%s] to [%s] ...",szSrcBuf,szBuf);
+    if ( ! CopyFile(szSrcBuf,szBuf,FALSE) ){
       dwError = GetLastError();
       sprintf(szPBuf2, "fail.(0x%08x)", dwError);
       strcat(szPBuf, szPBuf2);
