@@ -8,7 +8,7 @@
 # **** Please modify ****
 VCPKGDIR = C:/data/source/vcpkg/installed/x86-windows-static
 ZLIBINC = $(VCPKGDIR)/include
-ZLIBLIB = $(VCPKGDIR)/lib/zlib.lib
+ZLIBLIB = $(VCPKGDIR)/lib/zs.lib
 
 # for Visual C++
 CC      = cl
