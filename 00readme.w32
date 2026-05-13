@@ -10,6 +10,8 @@
 INPORTANT!
 ----------
   o Mew 6.9 and later supports Emacs 26.1 or later.
+  o mew-win32.el does not compiled from Mew 6.11.
+    Please remove <EmacsDir>/share/emacs/site-lisp/mew/mew-win32.elc manually.
 
 
 REQUIRED SOFTWARE

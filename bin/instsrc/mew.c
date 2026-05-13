@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1997-2018 Mew developing team.
+ * Copyright (C) 1997-2026 Mew developing team.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,8 +42,8 @@
 #include "resource.h"
 
 
-#define  COPYRIGHT_YEARS   "1997-2011"
-#define  MEWINST_VERSION   "1.4.1"
+#define  COPYRIGHT_YEARS   "1997-2026"
+#define  MEWINST_VERSION   "1.4.2"
 #define  MEWINST_DEFAULT   "mew.ini"
 #define  MEWINST_DEFAULT2  "mew2.ini"
 #define  LOGFILE_NAME      "mew.log"
@@ -211,6 +211,7 @@ void GetLinesFromMakefile( void )
   while (1){
     if ((pt=strchr(buf, '=')) != NULL){
       if (!strcmp(szObjs, "Default") &&
+	  !strchr(buf, '#') &&	// XXX:
 	  strstr(buf, "OBJS")){
 	  GetLines(fp, buf, sizeof(buf), szObjs);
 	  continue;
