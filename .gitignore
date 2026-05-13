@@ -25,3 +25,8 @@ bin/hs/cmew.exe
 bin/hs/dist
 TAGS
 info/dir
+.vs
+*.res
+*.ZIP
+*.sha1
+stack.yaml

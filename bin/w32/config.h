@@ -68,8 +68,10 @@
 /* Define if you have the setmode function.  */
 #define HAVE_SETMODE 1
 
-/* Define if you have the _setmode function.  */
-/* #undef HAVE__SETMODE */
+/* Define if you have the snprintf function.  */
+#if _MSC_VER >= 1900
+#define HAVE_SNPRINTF 1
+#endif
 
 /* Define if you have the chdir function.  */
 #define HAVE_CHDIR 1

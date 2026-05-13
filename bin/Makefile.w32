@@ -2,36 +2,19 @@
 
 #
 # Makefile for mewl.exe/mewencode.exe
-#                             for Visual C++ / Borland C++ Compiler
+#                             for Visual C++
 #
 
-# Note:
-# 1. If you want to use Cygwin, read ../00readme and follow its
-#    instructionx.
-# 2. You need pre-compiled and original zlib packages.
-#    Please download original tarball from
-#      http://www.gzip.org/zlib/,
-#    and put
-#      zconf.h, zlib.h, zlib.lib
-#    to suitable directory.
-# 2. If you want to use Borland C++ Compiler, you need import library.
-#    > implib -a <filename_of_import_library> <filename_of_zlib.dll>
-
 # **** Please modify ****
-ZLIBINC = C:/usr/local/zlib
-ZLIBLIB = C:/usr/local/zlib/zlib.lib
+VCPKGDIR = C:/data/source/vcpkg/installed/x86-windows-static
+ZLIBINC = $(VCPKGDIR)/include
+ZLIBLIB = $(VCPKGDIR)/lib/zlib.lib
 
 # for Visual C++
 CC      = cl
 CFLAGS  = -nologo -O2 -W3 -MT -Iw32 -I$(ZLIBINC) \
 	-D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_WARNINGS
 EXEFLAG = -Fe
-
-# for Borland C++
-#CC      = bcc32
-#CFLAGS  = -O2 -w -Iw32 -I$(ZLIBINC)
-#EXEFLAG = -e
-
 
 ################################################################
 
