@@ -42,17 +42,6 @@ HOW TO INSTALL
     > mew
 
 
-USING STUNNEL (SSL/TLS)
------------------------
-  o Install "tstunnel.exe".
-
-      1. Download "stunnel-?.??-win32-installer.exe" from
-         https://www.stunnel.org/
-      2. Install tstunnel.exe using the installer.
-
-  o Set "mew-prog-ssl" variable. See "dot.mew" file for detail.
-
-
 FAQ AND OTHER INFORMATION
 -------------------------
   Mew Official Homepage :
