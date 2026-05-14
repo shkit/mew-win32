@@ -43,7 +43,7 @@
 
 
 #define  COPYRIGHT_YEARS   "1997-2026"
-#define  MEWINST_VERSION   "1.4.2"
+#define  MEWINST_VERSION   "1.4.3"
 #define  MEWINST_DEFAULT   "mew.ini"
 #define  MEWINST_DEFAULT2  "mew2.ini"
 #define  LOGFILE_NAME      "mew.log"
@@ -64,6 +64,7 @@ char  szBinDir[MAX_PATH];
 char  szElispDir[MAX_PATH];
 char  szObjs[BUFLEN];
 char  szSrcs[BUFLEN];
+char  szExtraSrcs[BUFLEN];
 char  szBins[BUFLEN];
 char  szContribs[BUFLEN];
 char  szTempFile[MAX_PATH];
@@ -184,7 +185,13 @@ void GetLines(FILE *fp, char *buf, size_t len, char *dstbuf)
 {
   char   *pt;
 
-  if ( (pt=strchr(buf,'\\')) == NULL ) return;
+  if ( (pt=strchr(buf,'\\')) == NULL ){
+    pt = strchr( buf, '=' );
+    pt += 2;
+    strcpy( dstbuf, pt);
+    GetLine(fp,buf,len);
+    return;
+  }
   *pt = 0;
   pt = strchr( buf, '=' );
   pt += 2;
@@ -217,8 +224,14 @@ void GetLinesFromMakefile( void )
 	  continue;
       }
       if (!strcmp(szSrcs, "Default") &&
+	  !strstr(buf, "EXTRA_SRCS") &&	// XXX:
 	  strstr(buf, "SRCS")){
 	  GetLines(fp, buf, sizeof(buf), szSrcs);
+	  continue;
+      }
+      if (!strcmp(szExtraSrcs, "Default") &&
+	  strstr(buf, "EXTRA_SRCS")){
+	  GetLines(fp, buf, sizeof(buf), szExtraSrcs);
 	  continue;
       }
       if (!strcmp(szTempFile, "Default") &&
@@ -293,6 +306,9 @@ BOOL ReadIniFile()
   GetPrivateProfileString("Make","SRCS","Default",
 			  szSrcs,sizeof(szSrcs),
 			  szIniFile);
+  GetPrivateProfileString("Make","EXTRA_SRCS","Default",
+			  szExtraSrcs,sizeof(szExtraSrcs),
+			  szIniFile);
   GetPrivateProfileString("Make","BINS","Default",
 			  szBins,sizeof(szBins),
 			  szIniFile);
@@ -318,6 +334,11 @@ BOOL ReadIniFile()
     OutputLog(szPBuf);
     fError = TRUE;
   }
+  if ( ! strcmp(szExtraSrcs,"Default") ){
+    sprintf(szPBuf,"Error: EXTRA_SRCS is not found in [%s]",MEWINST_DEFAULT);
+    OutputLog(szPBuf);
+    fError = TRUE;
+  }
   if ( ! strcmp(szTempFile,"Default") ){
     sprintf(szPBuf,"Error: TEMPFILE is not found in [%s]",MEWINST_DEFAULT);
     OutputLog(szPBuf);
@@ -334,6 +355,8 @@ BOOL ReadIniFile()
   sprintf(szPBuf,"Objs=[%s]",szObjs);
   OutputDebugLog(szPBuf);
   sprintf(szPBuf,"Srcs=[%s]",szSrcs);
+  OutputDebugLog(szPBuf);
+  sprintf(szPBuf,"ExtraSrcs=[%s]",szExtraSrcs);
   OutputDebugLog(szPBuf);
   sprintf(szPBuf,"Bins=[%s]",szBins);
   OutputDebugLog(szPBuf);
@@ -366,16 +389,7 @@ BOOL CompileSources( VOID )
   memcpy(szTargetBuf,szObjs,BUFLEN);
   fp = fopen(szTempFile,"w+");
   if ( fp == NULL ) return ( FALSE );
-  fprintf(fp,"(setq load-path (cons \".\" load-path))\n(defun mew-compile () (mapcar (function (lambda (x) (byte-compile-file x))) (list ");
-  token = strtok( szTargetBuf, seps );
-  while ( token ){
-    fprintf(fp,"\"");
-    ReplaceString( token, ".elc", ".el");
-    fprintf(fp,token);
-    fprintf(fp,"\" ");
-    token = strtok( NULL, seps );
-  }
-  fprintf(fp,")))\n");
+  fprintf(fp,";;; -*- lexical-binding: nil; -*-\n(setq mew-compiling t)\n(setq load-path (cons \".\" load-path))\n(defun mew-compile () (mapcar (lambda (x) (byte-compile-file (symbol-name x))) '(%s)))\n", szSrcs);
   fclose(fp);
 
   /* compile sources */
@@ -519,7 +533,7 @@ VOID OutputErrorMessageLog( DWORD dwError )
 
 BOOL InstallMew( VOID )
 {
-  /* szSrcs/szObjs are destroyed */
+  /* szSrcs/szExtraSrcs/szObjs are destroyed */
   char *token;
   char seps[] = " \t";
   char szBuf[256],szSrcBuf[256],szBuf2[256],szSrcFile[MAX_PATH];
@@ -560,6 +574,26 @@ BOOL InstallMew( VOID )
 
   /* Sources */
   token = strtok( szSrcs, seps );
+  while ( token ){
+    sprintf(szBuf,"%s\\%s",szElispDir,token);
+    sprintf(szSrcBuf,"elisp\\%s",token);
+    sprintf(szPBuf,"Copying [%s] to [%s] ...",szSrcBuf,szBuf);
+    if ( ! CopyFile(szSrcBuf,szBuf,FALSE) ){
+      dwError = GetLastError();
+      sprintf(szPBuf2, "fail.(0x%08x)", dwError);
+      strcat(szPBuf, szPBuf2);
+      OutputLog(szPBuf);
+      OutputErrorMessageLog(dwError);
+      return ( FALSE );
+    } else {
+      strcat(szPBuf,"ok.");
+      OutputDebugLog(szPBuf);
+    }
+    token = strtok( NULL, seps );
+  }
+
+  /* Extra Sources */
+  token = strtok( szExtraSrcs, seps );
   while ( token ){
     sprintf(szBuf,"%s\\%s",szElispDir,token);
     sprintf(szSrcBuf,"elisp\\%s",token);
